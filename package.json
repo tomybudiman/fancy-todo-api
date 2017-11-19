@@ -1,0 +1,27 @@
+{
+  "name": "todo-list",
+  "version": "1.0.0",
+  "description": "Fancy Todo List",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon app.js",
+    "live": "live-server --open=public --ignore=node_modules --host=localhost"
+  },
+  "keywords": [],
+  "author": "Tomy Djaya Budiman",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "dotenv": "^4.0.0",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "fb": "^2.0.0",
+    "jsonwebtoken": "^8.1.0",
+    "live-server": "^1.2.0",
+    "mongodb": "^2.2.33",
+    "mongoose": "^4.13.4",
+    "nodemailer": "^4.4.0",
+    "randomstring": "^1.1.5"
+  }
+}

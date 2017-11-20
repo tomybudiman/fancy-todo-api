@@ -7,13 +7,13 @@ router.post("/add",todoControll.add);
 // Return all todo list current user
 router.post("/all",todoControll.all);
 
-// Return todo with unique id
+// Return todo with specific id
 router.post("/get",todoControll.findOne);
 
 // Update todo with unique id
 router.put("/edit",todoControll.update);
 
 // Delete todo with unique id
-router.post("/delete",todoControll.delete);
+router.delete("/delete",todoControll.delete);
 
 module.exports=router;

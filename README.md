@@ -6,11 +6,11 @@
 
 | URL | Method |Description |
 |:---:|:------:|:----------:|
-| /todo/add | POST | Add new todo in current user |
-| /todo/all | POST | Retrieve all todos in current user |
-| /todo/get | POST | Retrieve specific todo data |
-| /todo/edit | PUT | Edit specific todo data |
-| /todo/delete | DELETE | Delete specific todo data |
+| /localhost/todo/add | POST | Add new todo in current user |
+| /localhost/todo/all | POST | Retrieve all todos in current user |
+| /localhost/todo/get | POST | Retrieve specific todo data |
+| /localhost/todo/edit | PUT | Edit specific todo data |
+| /localhost/todo/delete | DELETE | Delete specific todo data |
 
 ### 2. How to use it?
 

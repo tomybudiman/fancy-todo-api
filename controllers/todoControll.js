@@ -45,17 +45,27 @@ module.exports={
       res.send(err);
     });
   },
+  // Update specific todo data
   update:(req,res)=>{
     const userId=verifyToken(req.body.token).id;
-    Todo.updateOne({
+    Todo.findOne({
       "_id":ObjectId(req.body.todoId)
-    },{
-      title:req.body.title,
-      desc:req.body.desc,
-      location:req.body.location,
-      time:req.body.time
-    }).then((stats)=>{
-      res.send(stats);
+    }).then((todo)=>{
+      if(todo.user_id == userId){
+        Todo.updateOne({
+          "_id":ObjectId(req.body.todoId)
+        },{
+          title:req.body.title,
+          desc:req.body.desc,
+          location:req.body.location,
+          time:req.body.time,
+          status:req.body.status
+        }).then((stats)=>{
+          res.send({status:true});
+        });
+      }else{
+        res.send({status:false,msg:"You don't have permission!"})
+      }
     }).catch((err)=>{
       res.send(err);
     });
@@ -67,7 +77,9 @@ module.exports={
       "_id":ObjectId(req.body.todoId)
     }).then((todo)=>{
       if(todo.user_id == userId){
-        Todo.remove({"_id":ObjectId(req.body.todoId)}).then((stats)=>{
+        Todo.remove({
+          "_id":ObjectId(req.body.todoId)
+        }).then((stats)=>{
           res.send({status:true});
         });
       }else{

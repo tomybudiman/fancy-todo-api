@@ -3,7 +3,7 @@ Vue.component("todo-list",{
   template:`
   <ul class="todo-list">
     <li v-for="(todo,index) in todos">
-      <div class="todo-title">
+      <div class="todo-title" @click="expand(todo._id)">
         <span>{{todo.title}}</span>
         <div class="arrow-icon glyphicon glyphicon-chevron-left"></div>
       </div>
@@ -46,10 +46,19 @@ Vue.component("todo-list",{
     },
     deleteTodo:function(targetId){
       this.$emit("deletedata",targetId);
+    },
+    expand:function(targetId){
+      // Reset all
+      $("div.todo-title").removeAttr("style");
+      $("div.todo-detail").slideUp(500);
+      // Expand selected
+      $("#"+targetId).prev("div.todo-title").css("backgroundColor","#FFF");
+      $("#"+targetId).slideDown(500);
     }
   }
 });
 
+// Create Todo Component
 Vue.component("create-todo",{
   template:`
   <div class="create-todo row" id="create-todo">

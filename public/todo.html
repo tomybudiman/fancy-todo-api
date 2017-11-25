@@ -9,7 +9,10 @@
   <title>Todo List App</title>
 </head>
 <body>
-  <div id="app" class="container">
+  <div id="app">
+    <span class="welcome-msg">
+      <i>Welcome back {{username}}!</i>
+    </span>
     <!-- Todo List -->
     <div class="todo">
       <!-- Todo Tab -->
@@ -19,6 +22,9 @@
         </li>
         <li>
           <a data-toggle="tab" href="#create">Create Todo</a>
+        </li>
+        <li>
+          <a @click="logout" href="#">Logout</a>
         </li>
       </ul>
       <!-- Todo Tab Content -->
@@ -42,14 +48,34 @@
       el:"#app",
       data:{
         todoList:[],
+        username:null,
         host:"http://localhost:3000/"
       },
+      beforeCreate:function(){
+        if(localStorage.getItem("login_token") == null){
+          window.location="index.html";
+        }
+      },
       created:function(){
-        setTimeout(function(){
-          this.getAllTodos()
-        }.bind(this),1000);
+        this.getAllTodos();
+        this.getUserData();
       },
       methods:{
+        getUserData:function(){
+          axios.get(this.host+"user/access/verify",{
+            headers:{
+              token:localStorage.getItem("login_token")
+            }
+          }).then(function({data}){
+            if(data.status){
+              this.username=data.user.name;
+            }else{
+              console.log(data.msg);
+            }
+          }.bind(this)).catch(function(err){
+            console.log(err);
+          });
+        },
         getAllTodos:function(){ // Mengambil semua todo dari database berdasarkan user
           axios.get(this.host+"todo/all",{
             headers:{
@@ -80,7 +106,7 @@
             console.log(err);
           });
         },
-        createTodo:function(payload){
+        createTodo:function(payload){ // Buat todo baru
           axios.post(this.host+"todo/add",payload,{
             headers:{
               token:localStorage.getItem("login_token")
@@ -91,7 +117,7 @@
             console.log(err);
           });
         },
-        deleteTodo:function(payload){
+        deleteTodo:function(payload){ // Hapus todo
           axios.delete(this.host+"todo/delete/"+payload,{
             headers:{
               token:localStorage.getItem("login_token")
@@ -109,6 +135,10 @@
           }.bind(this)).catch(function(err){
             console.log(err);
           });
+        },
+        logout:function(){
+          localStorage.removeItem("login_token");
+          window.location="index.html";
         }
       }
     });

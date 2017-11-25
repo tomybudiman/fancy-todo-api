@@ -9,6 +9,12 @@
   <title>Access | Todo List App</title>
 </head>
 <body>
+  <div class="loading" id="loading">
+    <div class="body">
+      <img src="./assets/icon/ripple.svg" alt="Loading">
+      <span>Checking... Please Wait!</span>
+    </div>
+  </div>
   <div id="app" class="form">
     <img src="./assets/icon/task-list.png" alt="Icon" title="Todo List App">
     <span>Todo List App</span>
@@ -24,8 +30,17 @@
     data:{
       host:"http://localhost:3000/"
     },
+    mounted:function(){
+      if(localStorage.getItem("login_token") != null){
+        setTimeout(function(){
+          this.verifyToken();
+        }.bind(this),500);
+      }else{
+        $("#loading").fadeOut(500);
+      }
+    },
     methods:{
-      loginWithFacebook:function(){
+      loginWithFacebook:function(){ // Login using facebook
         facebookLogin("email",function(fromFB){
           axios.get(this.host+"user/access/check",{
             headers:{
@@ -35,13 +50,30 @@
           }).then(function({data}){
             if(data.status){
               localStorage.setItem("login_token",data.token);
+              window.location="todo.html";
             }else{
-              console.log(data.msg);
+              localStorage.removeItem("login_token");
             }
           }).catch(function(err){
             console.log(err);
           });
         }.bind(this));
+      },
+      verifyToken:function(){ // Verify login token
+        axios.get(this.host+"user/access/verify",{
+          headers:{
+            token:localStorage.getItem("login_token")
+          }
+        }).then(function({data}){
+          if(data.status){
+            window.location="todo.html";
+          }else{
+            console.log(data.msg);
+            localStorage.removeItem("login_token");
+          }
+        }).catch(function(err){
+          console.log(err);
+        });
       }
     }
   });

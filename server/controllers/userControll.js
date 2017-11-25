@@ -54,13 +54,13 @@ module.exports={
     });
   },
   verify:(req,res)=>{ // Verify login token from local storage
-    const userId=verifyToken(req.params.token).id;
+    const userId=verifyToken(req.headers.token).id;
     if(userId){ // Jika verifikasi token berhasil
       User.findOne({
         "_id":ObjectId(userId)
       }).then((user)=>{
         if(user){ // Jika data user ditemukan
-          res.send({status:true,data:user});
+          res.send({status:true,user:user});
         }else{ // Jika data user tidak ditemukan
           res.send({status:false,msg:"User not found!"});
         }

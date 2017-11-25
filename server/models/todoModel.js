@@ -8,12 +8,8 @@ const todoSchema=new Schema({
   },
   title:String,
   desc:String,
-  status:{
-    type:Boolean,
-    default:false
-  },
+  status:Boolean,
   location:String,
-  time:Date,
   createdAt:{
     type:Date,
     default:new Date()

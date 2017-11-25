@@ -8,25 +8,9 @@ const verifyToken=(token)=>{
 }
 
 module.exports={
-  // Create new todo
-  add:(req,res)=>{
-    const userId=verifyToken(req.body.token).id;
-    const todoData=new Todo({
-      user_id:ObjectId(userId),
-      title:req.body.title,
-      desc:req.body.desc,
-      location:req.body.location,
-      time:req.body.time
-    });
-    todoData.save().then((stats)=>{
-      res.send(stats);
-    }).catch((err)=>{
-      res.send(err);
-    });
-  },
-  // Retrieve all todos data based on login token
+  // Retrieve all todos data based on login token => Beres
   all:(req,res)=>{
-    const userId=verifyToken(req.body.token).id;
+    const userId=verifyToken(req.headers.token).id;
     Todo.find({
       user_id:ObjectId(userId)
     }).sort({createdAt:"desc"}).then((todos)=>{
@@ -35,30 +19,46 @@ module.exports={
       res.send(err);
     });
   },
-  // Retrieve unique todo data based on ObjectId
+  // Create new todo => Beres
+  add:(req,res)=>{
+    const userId=verifyToken(req.headers.token).id;
+    const todoData=new Todo({
+      user_id:ObjectId(userId),
+      title:req.body.title,
+      desc:req.body.desc,
+      location:req.body.location,
+      status:req.body.status
+    });
+    todoData.save().then((stats)=>{
+      res.send(stats);
+    }).catch((err)=>{
+      res.send(err);
+    });
+  },
+  // Retrieve unique todo data based on ObjectId => Beres
   findOne:(req,res)=>{
+    const userId=verifyToken(req.headers.token).id;
     Todo.findOne({
-      "_id":ObjectId(req.body.todoId)
+      "_id":ObjectId(req.params.todoId)
     }).then((todo)=>{
       res.send(todo);
     }).catch((err)=>{
       res.send(err);
     });
   },
-  // Update specific todo data
+  // Update specific todo data => Beres
   update:(req,res)=>{
-    const userId=verifyToken(req.body.token).id;
+    const userId=verifyToken(req.headers.token).id;
     Todo.findOne({
       "_id":ObjectId(req.body.todoId)
     }).then((todo)=>{
-      if(todo.user_id == userId){
+      if(todo && todo.user_id == userId){ // Jika userId todo dengan token sama
         Todo.updateOne({
           "_id":ObjectId(req.body.todoId)
         },{
           title:req.body.title,
           desc:req.body.desc,
           location:req.body.location,
-          time:req.body.time,
           status:req.body.status
         }).then((stats)=>{
           res.send({status:true});
@@ -72,18 +72,19 @@ module.exports={
   },
   // Delete todo based on login token
   delete:(req,res)=>{
-    const userId=verifyToken(req.body.token).id;
+    const userId=verifyToken(req.headers.token).id;
+    const todoId=req.params.id;
     Todo.findOne({
-      "_id":ObjectId(req.body.todoId)
+      "_id":ObjectId(todoId)
     }).then((todo)=>{
-      if(todo.user_id == userId){
-        Todo.remove({
-          "_id":ObjectId(req.body.todoId)
+      if(todo){ // Jika todo ditemukan
+        Todo.deleteOne({
+          "_id":ObjectId(todoId)
         }).then((stats)=>{
-          res.send({status:true});
+          res.send({status:true,data:stats});
         });
       }else{
-        res.send({status:false,msg:"You don't have permission!"})
+        res.send({status:false,msg:"Todo tidak ditemukan!"});
       }
     }).catch((err)=>{
       res.send(err);

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="./assets/css/todo.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.8/vue.js"></script>
+  <title>Todo List App</title>
+</head>
+<body>
+  <div id="app" class="container">
+    <!-- Todo List -->
+    <div class="todo">
+      <!-- Todo Tab -->
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a data-toggle="tab" href="#list">Todo List</a>
+        </li>
+        <li>
+          <a data-toggle="tab" href="#create">Create Todo</a>
+        </li>
+      </ul>
+      <!-- Todo Tab Content -->
+      <div class="tab-content">
+        <div id="list" class="tab-pane active">
+          <div class="empty-array" v-if="todoList.length == 0">Empty</div>
+          <todo-list v-else :todos="todoList" @tododata="setUpdateTodo" @deletedata="deleteTodo"/>
+        </div>
+        <div id="create" class="tab-pane">
+          <create-todo @createtodo="createTodo"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="./component/component-todo.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    new Vue({
+      el:"#app",
+      data:{
+        todoList:[],
+        host:"http://localhost:3000/"
+      },
+      created:function(){
+        setTimeout(function(){
+          this.getAllTodos()
+        }.bind(this),1000);
+      },
+      methods:{
+        getAllTodos:function(){ // Mengambil semua todo dari database berdasarkan user
+          axios.get(this.host+"todo/all",{
+            headers:{
+              token:localStorage.getItem("login_token")
+            }
+          }).then(function({data}){
+            this.todoList=data;
+          }.bind(this)).catch(function(err){
+            console.log(err);
+          });
+        },
+        setUpdateTodo:function(payload){ // Update todo berdasarkan id todo
+          axios.put(this.host+"todo/edit",payload,{
+            headers:{
+              token:localStorage.getItem("login_token")
+            }
+          },payload).then(function({data}){
+            if(data.status){
+              this.todoList.forEach(function(todo,i){
+                if(todo._id == payload.todoId){
+                  this.todoList[i].title=payload.title;
+                }
+              }.bind(this));
+            }else{
+              console.log(data.msg);
+            }
+          }.bind(this)).catch(function(err){
+            console.log(err);
+          });
+        },
+        createTodo:function(payload){
+          axios.post(this.host+"todo/add",payload,{
+            headers:{
+              token:localStorage.getItem("login_token")
+            }
+          }).then(function({data}){
+            this.todoList.unshift(data);
+          }.bind(this)).catch(function(err){
+            console.log(err);
+          });
+        },
+        deleteTodo:function(payload){
+          axios.delete(this.host+"todo/delete/"+payload,{
+            headers:{
+              token:localStorage.getItem("login_token")
+            }
+          }).then(function({data}){
+            if(data.status){
+              this.todoList.forEach(function(todo,i){
+                if(todo._id == payload){
+                  this.todoList.splice(i,1);
+                }
+              }.bind(this));
+            }else{
+              console.log(data.msg);
+            }
+          }.bind(this)).catch(function(err){
+            console.log(err);
+          });
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+@import "common";
+
+html,body {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("../image/abstract-material-design.jpg");
+}
+
+.form {
+  top: 50%;
+  width: 85%;
+  margin: auto;
+  padding: 25px;
+  min-width: 200px;
+  max-width: 300px;
+  position: relative;
+  border-radius: 5px;
+  background-color: rgb(255,255,255);
+  -webkit-box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
+  box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  img {
+    width: 40%;
+    margin: auto;
+    display: block;
+  }
+  span {
+    color: #555;
+    display: block;
+    font-size: 35px;
+    margin-top: 20px;
+    text-align: center;
+    font-family: "Kalam",fantasy;
+  }
+  button {
+    height: 40px;
+    margin: auto;
+    border: none;
+    outline: none;
+    display: block;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: rgb(255,255,255);
+    background-color: #39579B;
+    border-bottom: 3px solid #314C88;
+  }
+  button:active {
+    border-bottom: 2px solid #314C88;
+    -webkit-transform: translateY(1px);
+    transform: translateY(1px);
+  }
+  @media screen and (max-width:$mobile){
+    span {font-size: 25px;}
+    button {font-size: 13px;}
+  }
+}

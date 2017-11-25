@@ -3,15 +3,48 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Todo List App</title>
+  <link rel="stylesheet" href="./assets/css/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.8/vue.js"></script>
+  <title>Access | Todo List App</title>
 </head>
 <body>
-  <div class="loading">
-    <img src="./assets/icon/ripple.svg" alt="Loading">
+  <div id="app" class="form">
+    <img src="./assets/icon/task-list.png" alt="Icon" title="Todo List App">
+    <span>Todo List App</span>
+    <button type="button" @click="loginWithFacebook">Facebook Connect</button>
   </div>
-  <button type="button" onclick="clickLoginFb()">Login with Facebook</button>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="./assets/js/facebooksdk.js" type="text/javascript"></script>
-  <script src="./assets/js/index.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  new Vue({
+    el:"#app",
+    data:{
+      host:"http://localhost:3000/"
+    },
+    methods:{
+      loginWithFacebook:function(){
+        facebookLogin("email",function(fromFB){
+          axios.get(this.host+"user/access/check",{
+            headers:{
+              accesstoken:fromFB.authResponse.accessToken,
+              userid:fromFB.authResponse.userID
+            }
+          }).then(function({data}){
+            if(data.status){
+              localStorage.setItem("login_token",data.token);
+            }else{
+              console.log(data.msg);
+            }
+          }).catch(function(err){
+            console.log(err);
+          });
+        }.bind(this));
+      }
+    }
+  });
+  </script>
 </body>
 </html>

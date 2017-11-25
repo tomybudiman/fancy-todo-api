@@ -4,11 +4,6 @@ const Schema=mongoose.Schema;
 const userSchema=new Schema({
   name:String,
   email:String,
-  verification:String,
-  verified:{
-    type:Boolean,
-    default:false
-  },
   fb_id:String,
   createdAt:{
     type:Date,

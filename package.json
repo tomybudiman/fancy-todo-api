@@ -4,7 +4,8 @@
   "description": "Fancy Todo List",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon app.js",
+    "app": "node app.js",
+    "dev": "nodemon server/app.js",
     "live": "live-server --open=public --ignore=node_modules --host=localhost"
   },
   "keywords": [],
@@ -21,7 +22,6 @@
     "live-server": "^1.2.0",
     "mongodb": "^2.2.33",
     "mongoose": "^4.13.4",
-    "nodemailer": "^4.4.0",
-    "randomstring": "^1.1.5"
+    "nodemailer": "^4.4.0"
   }
 }

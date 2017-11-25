@@ -5,15 +5,15 @@ const todoControll=require("../controllers/todoControll");
 router.post("/add",todoControll.add);
 
 // Return all todo list current user
-router.post("/all",todoControll.all);
+router.get("/all",todoControll.all);
 
 // Return todo with specific id
-router.post("/get",todoControll.findOne);
+router.post("/get/:todoId",todoControll.findOne);
 
 // Update todo with unique id
 router.put("/edit",todoControll.update);
 
 // Delete todo with unique id
-router.delete("/delete",todoControll.delete);
+router.delete("/delete/:id",todoControll.delete);
 
 module.exports=router;

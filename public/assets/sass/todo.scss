@@ -17,6 +17,7 @@ html,body {
 
 .welcome-msg {
   top: 20px;
+  z-index: 1;
   width: 100%;
   display: none;
   position: fixed;

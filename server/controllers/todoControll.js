@@ -14,7 +14,6 @@ module.exports={
     Todo.find({
       user_id:ObjectId(userId)
     }).sort({createdAt:"desc"}).then((todos)=>{
-      console.log(todos);
       res.send(todos)
     }).catch((err)=>{
       res.send(err);

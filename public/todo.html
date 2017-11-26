@@ -9,10 +9,18 @@
   <title>Todo List App</title>
 </head>
 <body>
+  <audio src="./assets/audio/notification.wav" autostart="false" id="notification-audio"></audio>
   <div id="app">
-    <span class="welcome-msg">
+    <span class="welcome-msg" id="welcome-msg">
       <i>Welcome back {{username}}!</i>
     </span>
+    <div class="menu-group">
+      <button type="button" class="group" @click="logout"></button>
+      <div class="notification-bell group" id="notification-bell">
+        <span class="passive icon"></span>
+        <span class="active icon"></span>
+      </div>
+    </div>
     <!-- Todo List -->
     <div class="todo">
       <!-- Todo Tab -->
@@ -22,9 +30,6 @@
         </li>
         <li>
           <a data-toggle="tab" href="#create">Create Todo</a>
-        </li>
-        <li>
-          <a @click="logout" href="#">Logout</a>
         </li>
       </ul>
       <!-- Todo Tab Content -->
@@ -44,6 +49,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="./component/component-todo.js" type="text/javascript"></script>
   <script type="text/javascript">
+  // By Tomy Djaya Budiman
+  // Copyright 2017
     new Vue({
       el:"#app",
       data:{
@@ -61,8 +68,24 @@
           this.getAllTodos();
           this.getUserData();
         }.bind(this),500);
+        // Show welcome alert
+        setTimeout(function(){
+          $("#welcome-msg").fadeIn(500,function(){
+            setTimeout(function(){
+              $("#welcome-msg").fadeOut(500);
+            },3000);
+          });
+        },1000);
       },
       methods:{
+        activeNotification:function(){
+          $("#notification-audio")[0].play();
+          $("#notification-bell").find(".passive").css("opacity",0);
+          $("#notification-bell").find(".active").css("opacity",1);
+          setTimeout(function(){
+            $("#notification-bell").find("span").removeAttr("style");
+          },1000);
+        },
         getUserData:function(){
           axios.get(this.host+"user/access/verify",{
             headers:{
@@ -104,6 +127,7 @@
             if(data.status){
               this.todoList.forEach(function(todo,i){
                 if(todo._id == payload.todoId){
+                  this.activeNotification();
                   this.todoList[i].title=payload.title;
                 }
               }.bind(this));
@@ -123,6 +147,8 @@
               token:localStorage.getItem("login_token")
             }
           }).then(function({data}){
+            this.activeNotification();
+            // Add new data to array
             var year=new Date(data.date).getFullYear();
             var month=new Date(data.date).getMonth() + 1;
             var date=new Date(data.date).getDate();
@@ -132,7 +158,7 @@
             console.log(err);
           });
         },
-        deleteTodo:function(payload){ // Hapus todo
+        deleteTodo:function(payload){ // Hapus todo dari todolist
           axios.delete(this.host+"todo/delete/"+payload,{
             headers:{
               token:localStorage.getItem("login_token")
@@ -141,6 +167,7 @@
             if(data.status){
               this.todoList.forEach(function(todo,i){
                 if(todo._id == payload){
+                  this.activeNotification();
                   this.todoList.splice(i,1);
                 }
               }.bind(this));

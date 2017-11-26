@@ -32,11 +32,6 @@ input[type="date"]::-webkit-outer-spin-button {
 html, body {
   background-color: #F1F1F1 !important; }
 
-.welcome-msg {
-  color: #777;
-  font-size: 16px;
-  font-family: "Roboto",sans-serif; }
-
 .empty-array {
   color: #555;
   font-size: 35px;
@@ -47,10 +42,62 @@ html, body {
   font-family: "Roboto",sans-serif;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.25); }
 
+.welcome-msg {
+  top: 20px;
+  width: 100%;
+  display: none;
+  position: fixed;
+  text-align: center; }
+  .welcome-msg i {
+    color: #777;
+    font-size: 15px;
+    max-height: 40px;
+    border-radius: 5px;
+    display: inline-block;
+    background-color: #FFF;
+    box-sizing: border-box;
+    padding: 10px 15px 10px 15px;
+    font-family: "Roboto",sans-serif;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1); }
+
+.menu-group {
+  top: 20px;
+  width: 80%;
+  margin: auto;
+  max-width: 900px;
+  position: relative; }
+  .menu-group div {
+    margin-right: 20px; }
+    .menu-group div .icon {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background-size: 60%;
+      background-position: center;
+      background-repeat: no-repeat; }
+    .menu-group div .passive {
+      background-image: url("../icon/alarm.png"); }
+    .menu-group div .active {
+      opacity: 0;
+      background-image: url("../icon/alarm-green.png"); }
+  .menu-group button {
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-image: url("../icon/logout.png"); }
+  .menu-group .group {
+    width: 40px;
+    height: 40px;
+    float: right;
+    border-radius: 5px;
+    position: relative;
+    border: 2px solid #777; }
+
 .todo {
   left: 0;
   right: 0;
-  top: 50px;
+  top: 75px;
   width: 80%;
   margin: auto;
   max-width: 900px;

@@ -1,8 +1,10 @@
+const mongoose=require("mongoose");
 const app=require("express")();
 const parser=require("body-parser");
 const env=require("dotenv").config();
 const cors=require("cors");
 // Config
+mongoose.connect(process.env.DB_URL);
 app.use(parser.urlencoded({extended:false}));
 app.use(parser.json());
 app.use(cors());

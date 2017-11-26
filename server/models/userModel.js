@@ -1,4 +1,4 @@
-const mongoose=require("mongoose").connect(process.env.DB_URL);
+const mongoose=require("mongoose");
 const Schema=mongoose.Schema;
 
 const userSchema=new Schema({

@@ -64,10 +64,8 @@
         }
       },
       created:function(){
-        setTimeout(function(){
-          this.getAllTodos();
-          this.getUserData();
-        }.bind(this),500);
+        this.getAllTodos();
+        this.getUserData();
         // Show welcome alert
         setTimeout(function(){
           $("#welcome-msg").fadeIn(500,function(){

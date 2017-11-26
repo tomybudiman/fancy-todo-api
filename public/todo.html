@@ -57,8 +57,10 @@
         }
       },
       created:function(){
-        this.getAllTodos();
-        this.getUserData();
+        setTimeout(function(){
+          this.getAllTodos();
+          this.getUserData();
+        }.bind(this),500);
       },
       methods:{
         getUserData:function(){
@@ -82,6 +84,12 @@
               token:localStorage.getItem("login_token")
             }
           }).then(function({data}){
+            data.forEach(function(todo,i){
+              var year=new Date(todo.date).getFullYear();
+              var month=new Date(todo.date).getMonth() + 1;
+              var date=new Date(todo.date).getDate();
+              data[i].date=`${year}-${month}-${date}`;
+            });
             this.todoList=data;
           }.bind(this)).catch(function(err){
             console.log(err);
@@ -107,11 +115,18 @@
           });
         },
         createTodo:function(payload){ // Buat todo baru
+          if(!payload.date){
+            payload.date=new Date();
+          }
           axios.post(this.host+"todo/add",payload,{
             headers:{
               token:localStorage.getItem("login_token")
             }
           }).then(function({data}){
+            var year=new Date(data.date).getFullYear();
+            var month=new Date(data.date).getMonth() + 1;
+            var date=new Date(data.date).getDate();
+            data.date=`${year}-${month}-${date}`;
             this.todoList.unshift(data);
           }.bind(this)).catch(function(err){
             console.log(err);

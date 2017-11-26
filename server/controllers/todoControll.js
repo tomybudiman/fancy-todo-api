@@ -14,6 +14,7 @@ module.exports={
     Todo.find({
       user_id:ObjectId(userId)
     }).sort({createdAt:"desc"}).then((todos)=>{
+      console.log(todos);
       res.send(todos)
     }).catch((err)=>{
       res.send(err);
@@ -27,7 +28,8 @@ module.exports={
       title:req.body.title,
       desc:req.body.desc,
       location:req.body.location,
-      status:req.body.status
+      status:req.body.status,
+      date:req.body.date
     });
     todoData.save().then((stats)=>{
       res.send(stats);
@@ -59,7 +61,8 @@ module.exports={
           title:req.body.title,
           desc:req.body.desc,
           location:req.body.location,
-          status:req.body.status
+          status:req.body.status,
+          date:req.body.date
         }).then((stats)=>{
           res.send({status:true});
         });

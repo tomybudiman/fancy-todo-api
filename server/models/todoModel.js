@@ -10,6 +10,7 @@ const todoSchema=new Schema({
   desc:String,
   status:Boolean,
   location:String,
+  date:Date,
   createdAt:{
     type:Date,
     default:new Date()
